@@ -1,0 +1,19 @@
+{
+	"name": "yii2generalsetting/yii2generalsetting",
+	"description": "General Setting",
+	"type": "yii2-extension",
+	"keywords": ["yii2", "extension"],
+	"license": "Apache-2.0",
+	"authors": [{
+		"name": "Ashok Sachdev",
+		"email": "agsachdev@groovweb.firm.in"
+	}],
+	"require": {
+		"yiisoft/yii2": "~2.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"yiigeneralsetting\\": "src"
+		}
+	}
+}
