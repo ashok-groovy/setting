@@ -16,7 +16,7 @@ use yii\helpers\Url;
 
 class Groovysettings extends Component {
    
-    public function Getcategoryconfig($cname,$type = "json"){       
+    public function Getcategoryconfig($cname,$type = "json",$title = ""){       
         $getID = AllSettings::find()->where(["title"=>$cname])->one();
         if(!empty($getID)){
             $id = $getID->id;
@@ -27,21 +27,22 @@ class Groovysettings extends Component {
             $newArray = [];
             if(!empty($savedData)){
                 foreach($savedData as $k=>$d){
+                    
                     $filedVal = AllSettingFields::find()->where(['id'=>$k])->asArray()->one();
-                    if($filedVal['s_type'] == 'file'){                   
-                        $url = Url::base(true);
+                    if($filedVal['s_type'] == 'file'){ 
+                        $url = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] : Url::base(true);
                         $path = Yii::getAlias('@app').'/../';
                         // echo $url;die;
                         if(file_exists($path.$d)){
                             $check = getimagesize($path.$d);
                             if($check !== false) {
-                                $newArray[$filedVal['s_label']] = $url.'/'.$d; 
+                                $newArray[$this->slugify($filedVal['s_label'])] = $url.'/'.$d; 
                                 $uploadOk = 1;
                             } 
                         }
                         
                     }else{
-                        $newArray[$filedVal['s_label']] = $d; 
+                        $newArray[$this->slugify($filedVal['s_label'])] = $d; 
                     }
                 }
             }
@@ -53,6 +54,11 @@ class Groovysettings extends Component {
         }else{
             return "No Record";
         }
+    }
+
+    public function slugify($text)
+    {
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '_', $text)));
     }
 
     public function Getallsttings($type = "json"){
@@ -81,7 +87,7 @@ class Groovysettings extends Component {
                 foreach($savedData as $k=>$d){
                     $filedVal = AllSettingFields::find()->where(['id'=>$k])->asArray()->one();
                     if($filedVal['s_type'] == 'file'){                   
-                        $url = Url::base(true);
+                        $url = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] : Url::base(true);
                         $path = Yii::getAlias('@app').'/../';
                         // echo $url;die;
                         if(file_exists($path.$d)){
