@@ -32,11 +32,14 @@ class Groovysettings extends Component {
                         $url = Url::base(true);
                         $path = Yii::getAlias('@app').'/../';
                         // echo $url;die;
-                        $check = getimagesize($path.$d);
-                        if($check !== false) {
-                            $newArray[$filedVal['s_label']] = $url.'/'.$d; 
-                            $uploadOk = 1;
-                        } 
+                        if(file_exists($path.$d)){
+                            $check = getimagesize($path.$d);
+                            if($check !== false) {
+                                $newArray[$filedVal['s_label']] = $url.'/'.$d; 
+                                $uploadOk = 1;
+                            } 
+                        }
+                        
                     }else{
                         $newArray[$filedVal['s_label']] = $d; 
                     }
@@ -81,11 +84,14 @@ class Groovysettings extends Component {
                         $url = Url::base(true);
                         $path = Yii::getAlias('@app').'/../';
                         // echo $url;die;
-                        $check = getimagesize($path.$d);
-                        if($check !== false) {
-                            $newArray = $url.'/'.$d; 
-                            $uploadOk = 1;
-                        } 
+                        if(file_exists($path.$d)){
+                            $check = getimagesize($path.$d);
+                            if($check !== false) {
+                                $newArray = $url.'/'.$d; 
+                                $uploadOk = 1;
+                            } 
+                        }
+                       
                     }else{
                         $newArray = $d; 
                     }
