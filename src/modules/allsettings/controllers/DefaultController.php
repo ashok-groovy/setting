@@ -14,6 +14,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\db\Schema;
+use yii\filters\AccessControl;
+
 
 
 
@@ -34,6 +36,21 @@ class DefaultController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [],
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['create','index', 'update', 'view', 'delete', 'savesetting' ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
