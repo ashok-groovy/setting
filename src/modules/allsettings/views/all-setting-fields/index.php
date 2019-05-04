@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Setting Fields');
 $this->params['breadcrumbs'][] = $this->title;
+$development = Yii::$app->get('getsettings', true);
 ?>
 <div class="all-setting-fields-index">
 
@@ -18,10 +19,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Setting Fields'), ['create?sid='.$_GET['sid']], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('app', 'Bulk Create Setting Fields'), ['bulkcreate?sid='.$_GET['sid']], ['class' => 'btn btn-primary']) ?>
-    </p>
+    <?php if($development->development){ ?>
+            <p>
+                <?= Html::a(Yii::t('app', 'Create Setting Fields'), ['create?sid='.$_GET['sid']], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('app', 'Bulk Create Setting Fields'), ['bulkcreate?sid='.$_GET['sid']], ['class' => 'btn btn-primary']) ?>
+            </p>
+    <?php } ?>
+
+    
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

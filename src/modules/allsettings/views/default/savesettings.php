@@ -136,6 +136,7 @@ background-color: rgba(238, 238, 238, 0.35);
 }
 </style>
 <div class="container settingDiv">
+   
     <h2><?= $name;?></h2>
     <form action="<?php echo Url::base(true);?>/allsettings/default/savesetting/?id=<?php echo $_GET['id']?>" method="post" enctype="multipart/form-data">
     <?php if(!empty($data)){
@@ -212,6 +213,11 @@ background-color: rgba(238, 238, 238, 0.35);
     <?php } }?>
     <div class="row m0auto">
       <input type="submit" name="submit" class="btn btn-primary submit_save_button" value="Submit">
+      <br>
+      <br>
+      <?php
+        echo Yii::$app->session->getFlash('success_setting');
+      ?>
     </div>
     </form>
 </div>

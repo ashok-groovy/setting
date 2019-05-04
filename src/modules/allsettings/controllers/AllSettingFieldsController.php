@@ -10,12 +10,14 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * AllSettingFieldsController implements the CRUD actions for AllSettingFields model.
  */
 class AllSettingFieldsController extends Controller
 {
+    public $development = true;
     /**
      * {@inheritdoc}
      */
@@ -29,6 +31,11 @@ class AllSettingFieldsController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function init(){
+        $daa = Yii::$app->get('getsettings', true);
+        $this->development = $daa->development;
     }
 
     /**
@@ -53,32 +60,37 @@ class AllSettingFieldsController extends Controller
     }
 
     public function actionBulkcreate(){
-        $model = new AllSettingFields();
-        $allSettings = AllSettings::find()->asArray()->all();
-        $allSettings = ArrayHelper::map($allSettings, 'id', 'title');
-        if ($model->load(Yii::$app->request->post())) {
-            $post = Yii::$app->request->post();
-            if(!empty($post['AllSettingFields'])){
-                foreach($post['AllSettingFields']['s_label'] as $k=>$v){
-                    $imodel = AllSettingFields::find()->where(['s_label'=>$v,'s_id'=>$post['AllSettingFields']['s_id']])->one();
-                    if(empty($imodel)){
-                        $imodel = new AllSettingFields();
-                        $imodel->s_label = $v;
+        if($this->development){
+            $model = new AllSettingFields();
+            $allSettings = AllSettings::find()->asArray()->all();
+            $allSettings = ArrayHelper::map($allSettings, 'id', 'title');
+            if ($model->load(Yii::$app->request->post())) {
+                $post = Yii::$app->request->post();
+                if(!empty($post['AllSettingFields'])){
+                    foreach($post['AllSettingFields']['s_label'] as $k=>$v){
+                        $imodel = AllSettingFields::find()->where(['s_label'=>$v,'s_id'=>$post['AllSettingFields']['s_id']])->one();
+                        if(empty($imodel)){
+                            $imodel = new AllSettingFields();
+                            $imodel->s_label = $v;
+                        }
+                        $imodel->s_id = $post['AllSettingFields']['s_id'];
+                        $imodel->s_type = $post['AllSettingFields']['s_type'][$k];
+                        $imodel->s_value = $post['AllSettingFields']['s_value'][$k];
+                        $imodel->save();
+                        
                     }
-                    $imodel->s_id = $post['AllSettingFields']['s_id'];
-                    $imodel->s_type = $post['AllSettingFields']['s_type'][$k];
-                    $imodel->s_value = $post['AllSettingFields']['s_value'][$k];
-                    $imodel->save();
-                    
+                    return $this->redirect(['index', 'sid' => $post['AllSettingFields']['s_id']]);
                 }
-                return $this->redirect(['index', 'sid' => $post['AllSettingFields']['s_id']]);
             }
+    
+            return $this->render('_bulk', [
+                'model' => $model,
+                'allSettings'=>$allSettings
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
         }
-
-        return $this->render('_bulk', [
-            'model' => $model,
-            'allSettings'=>$allSettings
-        ]);
+        
     }
 
     /**
@@ -101,24 +113,28 @@ class AllSettingFieldsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new AllSettingFields();
-        $allSettings = AllSettings::find()->asArray()->all();
-        $allSettings = ArrayHelper::map($allSettings, 'id', 'title');
-       
-        if ($model->load(Yii::$app->request->post())) {
-            $post = Yii::$app->request->post();
-            $imodel = AllSettingFields::find()->where(['s_label'=>$model->s_label,'s_id'=>$model->s_id])->one();
-            if(!empty($imodel)){
-                $model = $imodel;
+        if($this->development){
+            $model = new AllSettingFields();
+            $allSettings = AllSettings::find()->asArray()->all();
+            $allSettings = ArrayHelper::map($allSettings, 'id', 'title');
+        
+            if ($model->load(Yii::$app->request->post())) {
+                $post = Yii::$app->request->post();
+                $imodel = AllSettingFields::find()->where(['s_label'=>$model->s_label,'s_id'=>$model->s_id])->one();
+                if(!empty($imodel)){
+                    $model = $imodel;
+                }
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
             }
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
 
-        return $this->render('create', [
-            'model' => $model,
-            'allSettings'=>$allSettings
-        ]);
+            return $this->render('create', [
+                'model' => $model,
+                'allSettings'=>$allSettings
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
+        }
     }
 
     /**
@@ -130,18 +146,22 @@ class AllSettingFieldsController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        $allSettings = AllSettings::find()->asArray()->all();
-        $allSettings = ArrayHelper::map($allSettings, 'id', 'title');
-       
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        if($this->development){
+            $model = $this->findModel($id);
+            $allSettings = AllSettings::find()->asArray()->all();
+            $allSettings = ArrayHelper::map($allSettings, 'id', 'title');
+        
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
 
-        return $this->render('update', [
-            'model' => $model,
-            'allSettings'=>$allSettings
-        ]);
+            return $this->render('update', [
+                'model' => $model,
+                'allSettings'=>$allSettings
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
+        }
     }
 
     /**
@@ -153,7 +173,7 @@ class AllSettingFieldsController extends Controller
      */
     public function actionDelete($id)
     {
-        print_r($_GET);die;
+        // print_r($_GET);die;
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

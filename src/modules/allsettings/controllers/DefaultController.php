@@ -26,6 +26,7 @@ class DefaultController extends Controller
      * {@inheritdoc}
      */
     public $enableCsrfValidation = false;
+    public $development = true;
     public function behaviors()
     {
         return [
@@ -42,6 +43,8 @@ class DefaultController extends Controller
         $this->createTableallSettings();
         $this->createTableallSettingFields();
         $this->createSettingsaveds();
+        $daa = Yii::$app->get('getsettings', true);
+        $this->development = $daa->development;
     }
 
     public function createTableallSettings(){
@@ -122,12 +125,16 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AllSettingsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if($this->development){
+            $searchModel = new AllSettingsSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
+        }
     }
 
     /**
@@ -138,9 +145,13 @@ class DefaultController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if($this->development){
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
+        }
     }
 
     /**
@@ -150,15 +161,19 @@ class DefaultController extends Controller
      */
     public function actionCreate()
     {
-        $model = new AllSettings();
+        if($this->development){
+            $model = new AllSettings();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['index']);
+            }
+
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -170,15 +185,19 @@ class DefaultController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if($this->development){
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->redirect(['index']);
+            }
+
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+            return $this->redirect(Url::base(true));
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -260,7 +279,7 @@ class DefaultController extends Controller
                         $saved->save();
                     }
                 }
-                Yii::$app->session->setFlash('success_setting', 'updated.');
+                Yii::$app->session->setFlash('success_setting', 'Successfully updated.');
                 return $this->redirect(['savesetting',"id"=>$id]);
             }
             return $this->render('savesettings', [

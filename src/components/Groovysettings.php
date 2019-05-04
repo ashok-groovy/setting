@@ -15,7 +15,7 @@ use yii\helpers\Url;
 
 
 class Groovysettings extends Component {
-   
+    public $development;
     public function Getcategoryconfig($cname,$type = "json",$title = ""){       
         $getID = AllSettings::find()->where(["title"=>$cname])->one();
         if(!empty($getID)){
@@ -106,5 +106,11 @@ class Groovysettings extends Component {
             
         }
         return $newArray;
+    }
+
+    public function getAllMenuArray(){
+        $getID = AllSettings::find()->all();
+        $return = ArrayHelper::map($getID, "id","title");
+        return $return;
     }
 }

@@ -10,6 +10,8 @@ use yii\helpers\Url;
 
 $this->title = Yii::t('app', 'All Settings');
 $this->params['breadcrumbs'][] = $this->title;
+$development = Yii::$app->get('getsettings', true);
+
 ?>
 <div class="all-settings-index">
 
@@ -17,7 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create All Settings'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php if($development->development){ ?>
+                <?= Html::a(Yii::t('app', 'Create All Settings'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?php } ?>
     </p>
 
     <?= GridView::widget([
