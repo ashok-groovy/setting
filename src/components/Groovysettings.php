@@ -15,7 +15,7 @@ use yii\helpers\Url;
 
 
 class Groovysettings extends Component {
-    public $development;
+    public $development = true;
     public function Getcategoryconfig($cname,$type = "json",$title = ""){       
         $getID = AllSettings::find()->where(["title"=>$cname])->one();
         if(!empty($getID)){
