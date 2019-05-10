@@ -297,7 +297,7 @@ class DefaultController extends Controller
                     }
                 }
                 Yii::$app->session->setFlash('success_setting', 'Successfully updated.');
-                return $this->redirect(['savesetting',"id"=>$id]);
+                return $this->redirect(Url::to(['default/savesetting',"id"=>$id]));
             }
             return $this->render('savesettings', [
                 'data' => $data,
