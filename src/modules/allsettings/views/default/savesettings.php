@@ -167,6 +167,10 @@ background-color: rgba(238, 238, 238, 0.35);
                 if($c['s_type'] == 'files'){
                     $html = '<input type="file" multiple id="'.$c['s_label'].'" name="setting['.$c['id'].']">';
                 }
+
+                if($c['s_type'] == 'textarea'){
+                  $html = '<textarea id="'.$c['s_label'].'" name="setting['.$c['id'].']">'.$save.'</textarea>';
+                }
                 
                 if($c['s_type'] == 'checkbox' || $c['s_type'] == 'radio'){
                     $rc = '';

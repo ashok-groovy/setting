@@ -15,5 +15,10 @@
 		"psr-4": {
 			"yiigeneralsetting\\": "src"
 		}
-	}
+	},
+	"extra": {
+        "branch-alias": {
+            "dev-master": "v1.x-dev"
+        }
+    }
 }

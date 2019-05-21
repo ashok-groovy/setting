@@ -34,7 +34,7 @@ if($model->isNewRecord == 1){
                 <?= $form->field($model, 's_label[]')->textInput() ?>
             </div>
             <div class="col22">
-                <?= $form->field($model, 's_type[]')->dropDownList([ 'text' => 'Text', 'radio' => 'Radio', 'checkbox' => 'Checkbox', 'file' => 'File', 'files' => 'Files', ], ['prompt' => '']) ?>
+                <?= $form->field($model, 's_type[]')->dropDownList([ 'text' => 'Text', 'radio' => 'Radio', 'checkbox' => 'Checkbox', 'file' => 'File', 'files' => 'Files','textarea'=>'Textarea'  ], ['prompt' => '']) ?>
             </div>
             <div class="col22">
                 <?= $form->field($model, 's_value[]')->textInput() ?>

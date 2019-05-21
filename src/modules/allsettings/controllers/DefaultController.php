@@ -100,7 +100,7 @@ class DefaultController extends Controller
                 `id` int(11)  AUTO_INCREMENT PRIMARY KEY,
                 `s_id` int(11) NOT NULL,
                 `s_label` varchar(255) NOT NULL,
-                `s_type` enum('text','radio','checkbox','file','files','dropdown','color') NOT NULL DEFAULT 'text',
+                `s_type` enum('text','radio','checkbox','file','files','dropdown','color','textarea') NOT NULL DEFAULT 'text',
                 `s_value` text NOT NULL
               ) ENGINE=InnoDB DEFAULT CHARSET=latin1";
                
