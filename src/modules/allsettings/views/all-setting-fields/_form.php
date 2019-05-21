@@ -25,7 +25,7 @@ if($model->isNewRecord == 1){
 
     <?= $form->field($model, 's_label')->textInput() ?>
 
-    <?= $form->field($model, 's_type')->dropDownList([ 'text' => 'Text', 'radio' => 'Radio', 'checkbox' => 'Checkbox', 'file' => 'File', 'files' => 'Files','dropdown'=>'DropDown','color'=>'Colorpicker' ], ['prompt' => '']) ?>
+    <?= $form->field($model, 's_type')->dropDownList([ 'text' => 'Text', 'radio' => 'Radio', 'checkbox' => 'Checkbox', 'file' => 'File', 'files' => 'Files','dropdown'=>'DropDown','color'=>'Colorpicker','textarea'=>'Textarea' ], ['prompt' => '']) ?>
 
     <?= $form->field($model, 's_value')->textInput()->label($label); ?>
 
