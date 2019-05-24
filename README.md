@@ -32,6 +32,7 @@ Once the extension is installed, simply use it in your code by  :
     'getsettings' => [
         'class' => 'vendor\yii2generalsetting\yii2generalsetting\src\components\Groovysettings',
         'development'=>false,
+        's3UploadFiles'=>false,
     ],
 ],
 
