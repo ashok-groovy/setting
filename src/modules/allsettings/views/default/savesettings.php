@@ -152,10 +152,15 @@ background-color: rgba(238, 238, 238, 0.35);
                     // echo $url;die;
                     if(file_exists($path.$save)){
                       $check = getimagesize($path.$save);
-                      if($check !== false) {
-                          $file = '<img src="'.$url.'/'.$save.'" width=200/>';
-                          $uploadOk = 1;
-                      } 
+                      if($s3UploadFiles){
+                          $file = '<img src="'.$url.'/'.$save.'" width=200/>'; 
+                      }else{
+                        if($check !== false) {
+                            $file = '<img src="'.$url.'/'.$save.'" width=200/>';
+                            $uploadOk = 1;
+                        } 
+                      }
+                      
                     }
                    
                   }

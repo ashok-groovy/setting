@@ -29,6 +29,7 @@ class DefaultController extends Controller
      */
     public $enableCsrfValidation = false;
     public $development = true;
+    public $s3UploadFiles = false;
     public function behaviors()
     {
         return [
@@ -62,6 +63,7 @@ class DefaultController extends Controller
         $this->createSettingsaveds();
         $daa = Yii::$app->get('getsettings', true);
         $this->development = $daa->development;
+        $this->s3UploadFiles = $daa->s3UploadFiles;
     }
 
     public function createTableallSettings(){
@@ -303,6 +305,7 @@ class DefaultController extends Controller
                 'data' => $data,
                 'savedData'=>$savedData,
                 'name'=>$thisModel->title,
+                's3UploadFiles'=>$this->s3UploadFiles,
             ]);
         }else{
             return $this->redirect(['index']);
@@ -358,6 +361,26 @@ class DefaultController extends Controller
         // if everything is ok, try to upload file
         } else {
             if (move_uploaded_file($_FILES["tmp_name"], $target_file)) {
+                if($this->s3UploadFiles){
+                    $waterMarkImages = $target_file;
+                    $nameFile = "ad/".basename(str_replace("watermark_","",$waterMarkImages));
+                    $name = Yii::getAlias($waterMarkImages);
+    
+                    $nameFile = "gen_setting/".$fileName;
+                    try{
+                        $storage = Yii::$app->get('storage');
+                        $path=Yii::$app->basePath;
+                        $result = $storage->commands()->upload($nameFile, $name)->execute()->toArray();
+            
+                        $file_location = $result['ObjectURL'];
+                        unlink($basePath.$fileName);
+                        return $file_location;    
+                    }catch(\Exception $e){
+                        print_r($e->getMessage());die;
+                        return "";
+                    }    
+                }
+                
                 return $basePath.$fileName;
             } else {
                 return "";

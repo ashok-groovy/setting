@@ -16,6 +16,7 @@ use yii\helpers\Url;
 
 class Groovysettings extends Component {
     public $development = true;
+    public $s3UploadFiles = true;
     public function Getcategoryconfig($cname,$type = "json",$title = ""){       
         $getID = AllSettings::find()->where(["title"=>$cname])->one();
         if(!empty($getID)){
@@ -27,7 +28,6 @@ class Groovysettings extends Component {
             $newArray = [];
             if(!empty($savedData)){
                 foreach($savedData as $k=>$d){
-                    
                     $filedVal = AllSettingFields::find()->where(['id'=>$k])->asArray()->one();
                     if($filedVal['s_type'] == 'file'){ 
                         $url = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] : Url::base(true);
@@ -40,7 +40,6 @@ class Groovysettings extends Component {
                                 $uploadOk = 1;
                             } 
                         }
-                        
                     }else{
                         $newArray[$this->slugify($filedVal['s_label'])] = $d; 
                     }

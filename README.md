@@ -32,6 +32,7 @@ Once the extension is installed, simply use it in your code by  :
     'getsettings' => [
         'class' => 'vendor\yii2generalsetting\yii2generalsetting\src\components\Groovysettings',
         'development'=>false,
+        's3UploadFiles'=>false,
     ],
 ],
 
@@ -52,3 +53,10 @@ Yii::$app->getsettings->Getallsttings('array'); //get array format
 
 //Single Value By Name
 $apiKey = Yii::$app->getsettings->Getcategorysingleconfig('Front Settings','Google Key'); //Front Settings = Setting Name and Google Key = Field Name
+
+
+Notice
+-----
+if You old user so please add ENUM (textarea) in s_type (all_setting_fields table )
+Other Wise got a error 
+Thank you

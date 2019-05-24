@@ -18,6 +18,7 @@ use yii\helpers\Url;
 class AllSettingFieldsController extends Controller
 {
     public $development = true;
+    public $s3UploadFiles = false;
     /**
      * {@inheritdoc}
      */
@@ -36,6 +37,7 @@ class AllSettingFieldsController extends Controller
     public function init(){
         $daa = Yii::$app->get('getsettings', true);
         $this->development = $daa->development;
+        $this->s3UploadFiles = $daa->s3UploadFiles;
     }
 
     /**

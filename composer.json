@@ -9,7 +9,8 @@
 		"email": "agsachdev@groovweb.firm.in"
 	}],
 	"require": {
-		"yiisoft/yii2": "~2.0.0"
+		"yiisoft/yii2": "~2.0.0",
+		"agsachdev/yii2-digitalocean-spaces": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
@@ -18,7 +19,7 @@
 	},
 	"extra": {
         "branch-alias": {
-            "version": "v2-dev"
+            "version": "v2.1-dev"
         }
     }
 }
