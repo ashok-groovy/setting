@@ -32,13 +32,19 @@ class Groovysettings extends Component {
                     if($filedVal['s_type'] == 'file'){ 
                         $url = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] : Url::base(true);
                         $path = Yii::getAlias('@app').'/../';
-                        // echo $url;die;
-                        if(file_exists($path.$d)){
-                            $check = getimagesize($path.$d);
-                            if($check !== false) {
+                        if($this->s3UploadFiles){                           
+                            if( strpos( $d , "https://" ) !== false ){
+                                $newArray[$this->slugify($filedVal['s_label'])] = $d; 
+                            }else{
                                 $newArray[$this->slugify($filedVal['s_label'])] = $url.'/'.$d; 
-                                $uploadOk = 1;
-                            } 
+                            }
+                        }else{
+                            if(file_exists($path.$d)){
+                                $check = getimagesize($path.$d);
+                                if($check !== false) {
+                                    $newArray[$this->slugify($filedVal['s_label'])] = $url.'/'.$d; 
+                                } 
+                            }
                         }
                     }else{
                         $newArray[$this->slugify($filedVal['s_label'])] = $d; 
@@ -73,28 +79,35 @@ class Groovysettings extends Component {
 
     public function Getcategorysingleconfig($cname,$fname,$type = "json"){       
         $getID = AllSettings::find()->where(["title"=>$cname])->one();
+        
         $newArray = '';
         if(!empty($getID)){
             $id = $getID->id;
-            $data = AllSettingFields::find()->where(['s_id'=>$id,'s_label'=>$fname])->asArray()->all();       
-            $result = ArrayHelper::getColumn($data, 'id');
-            
-            $savedData = SettingSaved::find()->where('f_id IN('.implode(",",$result).')')->asArray()->all();
+            $data = AllSettingFields::find()->where(['s_id'=>$id,'s_label'=>$fname])->asArray()->all();
+            $result = ArrayHelper::getColumn($data, 'id');            
+            $savedData = SettingSaved::find()->where('f_id IN('.implode(",",$result).')')->asArray()->all();           
             $savedData = ArrayHelper::map($savedData, 'f_id','value');
-            
             if(!empty($savedData)){
                 foreach($savedData as $k=>$d){
                     $filedVal = AllSettingFields::find()->where(['id'=>$k])->asArray()->one();
                     if($filedVal['s_type'] == 'file'){                   
                         $url = !empty($_SERVER['HTTP_HOST']) ? $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'] : Url::base(true);
                         $path = Yii::getAlias('@app').'/../';
-                        // echo $url;die;
-                        if(file_exists($path.$d)){
+                        
+                        if($this->s3UploadFiles){                           
+                            if( strpos( $d , "https://" ) !== false ){
+                                $newArray = $d;
+                            }else{
+                                $newArray = $url.'/'.$d;
+                            }
+                        }else{
+                          if(file_exists($path.$d)){
                             $check = getimagesize($path.$d);
                             if($check !== false) {
                                 $newArray = $url.'/'.$d; 
                                 $uploadOk = 1;
                             } 
+                          }
                         }
                        
                     }else{
