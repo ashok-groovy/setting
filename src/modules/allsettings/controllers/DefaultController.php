@@ -287,9 +287,19 @@ class DefaultController extends Controller
                         $saved = SettingSaved::find()->where(['f_id'=>$k])->one();
                         
                         $path = Yii::getAlias('@app').'/../';
-                        if(!empty($saved) && file_exists($path.$saved->value)){
-                            unlink($path.$saved->value);
+                        if( strpos( $saved->value , "https://" ) !== false ){
+                            $storage = Yii::$app->get('storage');
+                            $baseName = basename($saved->value);
+                            $result = $storage->commands()->delete('gen_setting/'.$baseName)->execute();
+                        }else{
+                            if(!empty($saved) && file_exists($path.$saved->value)){
+                                if(file_exists($path)){
+                                    unlink($path.$saved->value);
+                                }
+                            }   
                         }
+                        
+                        
                         if(empty($saved)){
                             $saved = new SettingSaved();    
                         } 
@@ -373,7 +383,10 @@ class DefaultController extends Controller
                         $result = $storage->commands()->upload($nameFile, $name)->execute()->toArray();
             
                         $file_location = $result['ObjectURL'];
-                        unlink($basePath.$fileName);
+                        if(file_exists($basePath.$fileName)){
+                            unlink($basePath.$fileName);
+                        }
+                        
                         return $file_location;    
                     }catch(\Exception $e){
                         print_r($e->getMessage());die;

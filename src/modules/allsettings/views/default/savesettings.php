@@ -150,18 +150,23 @@ background-color: rgba(238, 238, 238, 0.35);
                     $url = Url::base(true);
                     $path = Yii::getAlias('@app').'/../';
                     // echo $url;die;
-                    if(file_exists($path.$save)){
-                      $check = getimagesize($path.$save);
-                      if($s3UploadFiles){
-                          $file = '<img src="'.$url.'/'.$save.'" width=200/>'; 
-                      }else{
+                    if($s3UploadFiles){
+                        if( strpos( $save , "https://" ) !== false ){
+                            $newUrl = $save;
+                        }else{
+                            $newUrl = $url.'/'.$save;
+                        }
+                        $file = '<img src="'.$newUrl.'" width=200/>';
+                    }else{
+                      if(file_exists($path.$save)){
+                        $check = getimagesize($path.$save);
                         if($check !== false) {
                             $file = '<img src="'.$url.'/'.$save.'" width=200/>';
                             $uploadOk = 1;
                         } 
                       }
-                      
                     }
+                    
                    
                   }
                   $html = '<input type="'.$c['s_type'].'" value="'.$save.'" id="'.$c['s_label'].'" data-type="'.$c['s_value'].'" name="'.$c['id'].'"><span>'.$file.'</span>';
