@@ -285,21 +285,20 @@ class DefaultController extends Controller
                         $filedVal = AllSettingFields::find()->where(['s_id'=>$k])->asArray()->one();
                         $file = $this->fileUpload($v);
                         $saved = SettingSaved::find()->where(['f_id'=>$k])->one();
-                        
                         $path = Yii::getAlias('@app').'/../';
-                        if( strpos( $saved->value , "https://" ) !== false ){
-                            $storage = Yii::$app->get('storage');
-                            $baseName = basename($saved->value);
-                            $result = $storage->commands()->delete('gen_setting/'.$baseName)->execute();
-                        }else{
-                            if(!empty($saved) && file_exists($path.$saved->value)){
-                                if(file_exists($path)){
-                                    unlink($path.$saved->value);
-                                }
-                            }   
+                        if(!empty($saved)){
+                            if( strpos( $saved->value , "https://" ) !== false ){
+                                $storage = Yii::$app->get('storage');
+                                $baseName = basename($saved->value);
+                                $result = $storage->commands()->delete('gen_setting/'.$baseName)->execute();
+                            }else{
+                                if(!empty($saved) && file_exists($path.$saved->value)){
+                                    if(file_exists($path)){
+                                        unlink($path.$saved->value);
+                                    }
+                                }   
+                            }
                         }
-                        
-                        
                         if(empty($saved)){
                             $saved = new SettingSaved();    
                         } 
