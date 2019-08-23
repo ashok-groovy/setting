@@ -40,6 +40,9 @@ if($model->isNewRecord == 1){
                 <?= $form->field($model, 's_value[]')->textInput() ?>
             </div>
             <div class="col22">
+                <?= $form->field($model, 's_note[]')->textInput() ?>
+            </div>
+            <div class="col22">
                 <button class="btn btn-success btn-clone-setting"><i class="fa fa-plus"></i></button>
             </div>
         </div>

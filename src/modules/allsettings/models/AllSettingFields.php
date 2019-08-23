@@ -33,7 +33,7 @@ class AllSettingFields extends \yii\db\ActiveRecord
         return [
             [['s_id', 's_label'], 'required'],
             [['s_id'], 'integer'],
-            [['s_type', 's_value'], 'string'],
+            [['s_type', 's_value','s_note'], 'string'],
             [['s_label'], 'string', 'max' => 255],
             [['s_id'], 'exist', 'skipOnError' => true, 'targetClass' => AllSettings::className(), 'targetAttribute' => ['s_id' => 'id']],
         ];

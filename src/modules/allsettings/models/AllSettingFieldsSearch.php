@@ -18,7 +18,7 @@ class AllSettingFieldsSearch extends AllSettingFields
     {
         return [
             [['id', 's_id'], 'integer'],
-            [['s_type', 's_value'], 'safe'],
+            [['s_type', 's_value','s_note'], 'safe'],
         ];
     }
 

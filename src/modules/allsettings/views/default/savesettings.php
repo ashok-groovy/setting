@@ -146,7 +146,6 @@ background-color: rgba(238, 238, 238, 0.35);
                 $file = '';
                 if($c['s_type'] == 'file'){
                   if($save != '' && $c['s_type'] == 'file'){
-                    
                     $url = Url::base(true);
                     $path = Yii::getAlias('@app').'/../';
                     // echo $url;die;
@@ -169,7 +168,7 @@ background-color: rgba(238, 238, 238, 0.35);
                     
                    
                   }
-                  $html = '<input type="'.$c['s_type'].'" value="'.$save.'" id="'.$c['s_label'].'" data-type="'.$c['s_value'].'" name="'.$c['id'].'"><span>'.$file.'</span>';
+                  $html = '<input type="'.$c['s_type'].'" value="'.$save.'" id="'.$c['s_label'].'" data-type="'.$c['s_value'].'" name="'.$c['id'].'"><span>'.$file.'</span> <span>'.$c['s_note'].'</span>';
                 }
                 if($c['s_type'] == 'text' || $c['s_type'] == 'color'){
                   $html = '<input type="'.$c['s_type'].'" value="'.$save.'" id="'.$c['s_label'].'" data-type="'.$c['s_value'].'" name="setting['.$c['id'].']">';

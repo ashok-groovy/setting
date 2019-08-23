@@ -29,6 +29,8 @@ if($model->isNewRecord == 1){
 
     <?= $form->field($model, 's_value')->textInput()->label($label); ?>
 
+    <?= $form->field($model, 's_note')->textInput(); ?>
+
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
