@@ -250,15 +250,20 @@ class DefaultController extends Controller
 
     public function actionSavesetting($id){
         $data = AllSettingFields::find()->where(['s_id'=>$id])->asArray()->all();
+     
         if(!empty($data)){
             $result = ArrayHelper::getColumn($data, 'id');
+            
             $savedData = SettingSaved::find()->where('f_id IN('.implode(",",$result).')')->asArray()->all();
             $savedData = ArrayHelper::map($savedData, 'f_id','value');
+            
             $thisModel = $this->findModel($id);
-            if(isset($_POST['submit'])){           
+            if(isset($_POST['submit'])){   
+                      
                 if(!empty($_POST)){
                     if(isset($_POST['setting'])){
-                        foreach($_POST['setting'] as $k=>$v){                                     
+                        foreach($_POST['setting'] as $k=>$v){   
+                            // print_r($k );die;                            
                             if(is_array($v)){
                                 $saved = SettingSaved::find()->where(['f_id'=>$k])->one();
                                 if(empty($saved)){
@@ -281,16 +286,20 @@ class DefaultController extends Controller
                 }
                 if(!empty($_FILES)){
                     foreach($_FILES as $k=>$v){ 
-                        if($v['error'] != 0) continue;                                     
-                        $filedVal = AllSettingFields::find()->where(['s_id'=>$k])->asArray()->one();
-                        $file = $this->fileUpload($v);
+                        if($v['error'] != 0) continue; 
+                        $filedVal = AllSettingFields::find()->where(['id'=>$k])->asArray()->one();
+                        if(!empty($filedVal)){
+                            $file = $this->fileUpload($v,strtolower(str_replace(" ","-",$filedVal['s_label'])));
+                        }else{
+                            $file = $this->fileUpload($v);
+                        }                        
                         $saved = SettingSaved::find()->where(['f_id'=>$k])->one();
                         $path = Yii::getAlias('@app').'/../';
                         if(!empty($saved)){
                             if( strpos( $saved->value , "https://" ) !== false ){
                                 $storage = Yii::$app->get('storage');
                                 $baseName = basename($saved->value);
-                                $result = $storage->commands()->delete('gen_setting/'.$baseName)->execute();
+                                // $result = $storage->commands()->delete('gen_setting/'.$baseName)->execute();
                             }else{
                                 if(!empty($saved) && file_exists($path.$saved->value)){
                                     if(file_exists($path)){
@@ -322,7 +331,7 @@ class DefaultController extends Controller
         
     }
 
-    public function fileUpload($files){
+    public function fileUpload($files,$name = ""){
         $_FILES = $files;
         $path = Yii::getAlias('@app').'/../';
         $basePath ="uploads/gsetting/";
@@ -330,10 +339,12 @@ class DefaultController extends Controller
         if (!file_exists($target_dir)) {
             mkdir($target_dir, 0777, true);
         }
-        
+        if(empty($name)){
+            $name = uniqid();
+        }
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo(basename($_FILES["name"]),PATHINFO_EXTENSION));
-        $fileName = uniqid().'.'.$imageFileType;
+        $fileName = $name.'.'.$imageFileType;
         $target_file = $target_dir . $fileName;
         // Check if image file is a actual image or fake image
         // if(isset($_POST["submit"])) {
