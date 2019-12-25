@@ -8,6 +8,8 @@
 		"name": "Ashok Sachdev",
 		"email": "agsachdev@groovweb.firm.in"
 	}],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"require": {
 		"yiisoft/yii2": "~2.0.0",
 		"agsachdev/yii2-digitalocean-spaces": "dev-master"
